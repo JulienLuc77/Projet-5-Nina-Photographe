@@ -1,0 +1,56 @@
+ SetOutputFilter DEFLATE 
+ AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/x-javascript 
+  
+ BrowserMatch ^Mozilla/4 gzip-only-text/html 
+ BrowserMatch ^Mozilla/4\.0[678] no-gzip 
+ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html 
+ BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html 
+ 
+ <IfModule mod_headers.c> 
+  <FilesMatch "\.(ico|jpe?g|png|gif|swf|css|gz)$"> 
+  Header set Cache-Control "max-age=2592000, public" 
+  </FilesMatch> 
+  <FilesMatch "\.(js)$"> 
+  Header set Cache-Control "max-age=2592000, private" 
+  </FilesMatch> 
+ <filesMatch "\.(html|htm)$"> 
+ Header set Cache-Control "max-age=7200, public" 
+ </filesMatch> 
+ # Enleve le cache pour les ressources dynamiques 
+ <FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$"> 
+ Header unset Cache-Control 
+ </FilesMatch> 
+ </IfModule> 
+
+< IfModule  mod_expires.c >
+  ExpireActif le
+
+ # Images 
+  ExpiresByType image/jpeg  "accès plus 1 an" 
+  ExpiresByType image/gif  "accès plus 1 an" 
+  ExpiresByType image/png  "accès plus 1 an" 
+  ExpiresByType image/webp  "accès plus 1 an" 
+  ExpiresByType image/svg+xml  "accès plus 1 an" 
+  ExpiresByType image/x-icon  "accès plus 1 an"
+
+  # Video 
+  ExpiresByType video/webm  "accès plus 1 an" 
+  ExpiresByType video/mp4  "accès plus 1 an" 
+  ExpiresByType video/mpeg  "accès plus 1 an"
+
+  # Polices 
+  ExpiresByType font/ttf  "accès plus 1 an" 
+  ExpiresByType font/otf  "accès plus 1 an" 
+  ExpiresByType font/woff  "accès plus 1 an" 
+  ExpiresByType font/woff2  "accès plus 1 an" 
+  ExpiresByType application/font-woff  "accès plus 1 an"
+
+  # CSS, JavaScript 
+  ExpiresByType text/css  "accès plus 1 an" 
+  ExpiresByType text/javascript  "accès plus 1 an" 
+  ExpiresByType application/javascript  "accès plus 1 an"
+
+  # Autres 
+  ExpiresByType application/pdf  "accès plus 1 an" 
+  ExpiresByType image/vnd.microsoft.icon  "accès plus 1 an" 
+</ IfModule >

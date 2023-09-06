@@ -1,56 +1,64 @@
- SetOutputFilter DEFLATE 
- AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/x-javascript 
-  
- BrowserMatch ^Mozilla/4 gzip-only-text/html 
- BrowserMatch ^Mozilla/4\.0[678] no-gzip 
- BrowserMatch \bMSIE !no-gzip !gzip-only-text/html 
- BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html 
- 
- <IfModule mod_headers.c> 
-  <FilesMatch "\.(ico|jpe?g|png|gif|swf|css|gz)$"> 
-  Header set Cache-Control "max-age=2592000, public" 
-  </FilesMatch> 
-  <FilesMatch "\.(js)$"> 
-  Header set Cache-Control "max-age=2592000, private" 
-  </FilesMatch> 
- <filesMatch "\.(html|htm)$"> 
- Header set Cache-Control "max-age=7200, public" 
- </filesMatch> 
- # Enleve le cache pour les ressources dynamiques 
- <FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$"> 
- Header unset Cache-Control 
- </FilesMatch> 
- </IfModule> 
+ # Activation du module mod_expires
+LoadModule expires_module modules/mod_expires.so
 
-< IfModule  mod_expires.c >
-  ExpireActif le
+# Activation de la compression Gzip
+<IfModule mod_deflate.c>
+  SetOutputFilter DEFLATE
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/x-javascript
+</IfModule>
 
- # Images 
-  ExpiresByType image/jpeg  "accès plus 1 an" 
-  ExpiresByType image/gif  "accès plus 1 an" 
-  ExpiresByType image/png  "accès plus 1 an" 
-  ExpiresByType image/webp  "accès plus 1 an" 
-  ExpiresByType image/svg+xml  "accès plus 1 an" 
-  ExpiresByType image/x-icon  "accès plus 1 an"
+# Activation du module mod_headers
+<IfModule mod_headers.c>
+  # Mise en cache des fichiers statiques
+  <FilesMatch "\.(ico|jpe?g|png|gif|swf|css|gz)$">
+    Header set Cache-Control "max-age=2592000, public"
+  </FilesMatch>
+  <FilesMatch "\.(js)$">
+    Header set Cache-Control "max-age=2592000, private"
+  </FilesMatch>
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "max-age=7200, public"
+  </FilesMatch>
 
-  # Video 
-  ExpiresByType video/webm  "accès plus 1 an" 
-  ExpiresByType video/mp4  "accès plus 1 an" 
-  ExpiresByType video/mpeg  "accès plus 1 an"
+  # Désactivation du cache pour les ressources dynamiques
+  <FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$">
+    Header unset Cache-Control
+  </FilesMatch>
+</IfModule>
 
-  # Polices 
-  ExpiresByType font/ttf  "accès plus 1 an" 
-  ExpiresByType font/otf  "accès plus 1 an" 
-  ExpiresByType font/woff  "accès plus 1 an" 
-  ExpiresByType font/woff2  "accès plus 1 an" 
-  ExpiresByType application/font-woff  "accès plus 1 an"
+# Activation du module mod_expires
+<IfModule mod_expires.c>
+  ExpiresActive On
 
-  # CSS, JavaScript 
-  ExpiresByType text/css  "accès plus 1 an" 
-  ExpiresByType text/javascript  "accès plus 1 an" 
-  ExpiresByType application/javascript  "accès plus 1 an"
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
 
-  # Autres 
-  ExpiresByType application/pdf  "accès plus 1 an" 
-  ExpiresByType image/vnd.microsoft.icon  "accès plus 1 an" 
-</ IfModule >
+  # Vidéo
+  ExpiresByType video/webm "access plus 1 year"
+  ExpiresByType video/mp4 "access plus 1 year"
+  ExpiresByType video/mpeg "access plus 1 year"
+
+  # Polices
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType application/font-woff "access plus 1 year"
+
+  # CSS, JavaScript
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+
+  # Autres
+  ExpiresByType application/pdf "access plus 1 year"
+  ExpiresByType image/vnd.microsoft.icon "access plus 1 year"
+
+  # Ajout de l'entête Cache-Control pour une meilleure compatibilité avec les navigateurs
+  Header append Cache-Control "public, max-age=31536000"
+</IfModule>
